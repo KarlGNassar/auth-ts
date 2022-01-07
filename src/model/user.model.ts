@@ -5,21 +5,23 @@ import {
   Severity,
   pre,
   DocumentType,
+  index,
 } from "@typegoose/typegoose";
 import argon2 from "argon2";
 import { nanoid } from "nanoid";
 import log from "../utils/logger";
 
-// @pre<User>("save", async () => {
-//   if (!this.isModified("password")) {
-//     return;
-//   }
+@pre<User>("save", async function () {
+  if (!this.isModified("password")) {
+    return;
+  }
 
-//   const hash = await argon2.hash(this.password);
-//   this.password = hash;
+  const hash = await argon2.hash(this.password);
+  this.password = hash;
 
-//   return;
-// })
+  return;
+})
+@index({ email: 1 })
 @modelOptions({
   schemaOptions: {
     timestamps: true,
